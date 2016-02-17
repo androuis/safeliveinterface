@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:circle="http://schemas.android.com/apk/res-auto"
+       android:layout_width="match_parent"
+       android:layout_height="match_parent">
+
+    <evolveconference.safelive.ui.view.CircleImageView
+        android:id="@+id/main_calendar_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/blood_pressure_2"
+        android:tint="@color/white_smoke"
+        circle:name="@string/da_blood_pressure"/>
+
+    <evolveconference.safelive.ui.view.CircleImageView
+        android:id="@+id/main_facebook_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/audio_2"
+        android:tint="@color/white_smoke"
+        circle:name="@string/da_audio"/>
+
+
+    <evolveconference.safelive.ui.view.CircleImageView
+        android:id="@+id/main_7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/respiratory_2"
+        android:tint="@color/white_smoke"
+        circle:name="@string/da_respiratory"/>
+
+    <evolveconference.safelive.ui.view.CircleImageView
+        android:id="@+id/main_key_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/activity_2"
+        android:tint="@color/white_smoke"
+        circle:name="@string/da_activity"/>
+
+    <evolveconference.safelive.ui.view.CircleImageView
+        android:id="@+id/main_8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/oximetry_2"
+        android:tint="@color/white_smoke"
+        circle:name="@string/da_oximetry"/>
+
+
+    <evolveconference.safelive.ui.view.CircleImageView
+        android:id="@+id/main_tap_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/heart_status_2"
+        android:tint="@color/white_smoke"
+        circle:name="@string/da_heart_status"/>
+
+
+    <evolveconference.safelive.ui.view.CircleImageView
+        android:id="@+id/main_9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/temperature_2"
+        android:tint="@color/white_smoke"
+        circle:name="@string/da_temperature"/>
+
+</merge>

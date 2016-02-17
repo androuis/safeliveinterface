@@ -1,0 +1,29 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/history_row_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1st Jan 2015, 17h"/>
+
+    <TextView
+        android:id="@+id/history_row_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/alerts"
+        android:textColor="@color/black_text"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:id="@+id/history_row_subtext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5 warnings - 2 high risk patients, 3 residents, 2"
+        android:textColor="@color/dark_gray"
+        android:textSize="14sp"/>
+</LinearLayout>

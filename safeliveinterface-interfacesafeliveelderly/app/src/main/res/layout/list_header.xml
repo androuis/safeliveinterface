@@ -1,0 +1,44 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingBottom="5dp"
+    android:paddingEnd="10dp"
+    android:paddingLeft="13dp"
+    android:paddingRight="10dp"
+    android:paddingStart="13dp"
+    android:paddingTop="5dp">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/header_text"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="@string/alerts"
+            android:textColor="@color/banner_orange"
+            android:textSize="20sp"/>
+
+        <TextView
+            android:id="@+id/header_subtext"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:text="5 warnings - 2 high risk patients, 3 residents, 2"
+            android:textColor="@color/dark_gray"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/btn_expand_toggle"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_weight="0"
+        android:src="@drawable/ic_less"/>
+</LinearLayout>

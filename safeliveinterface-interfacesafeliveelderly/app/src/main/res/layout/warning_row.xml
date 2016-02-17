@@ -1,0 +1,50 @@
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp">
+
+    <evolveconference.safelive.ui.view.RoundImageView
+        android:id="@+id/row_avatar"
+        android:layout_width="65dp"
+        android:layout_height="65dp"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/old1"/>
+
+    <LinearLayout
+        android:layout_width="1dp"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/row_avatar"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="10dp">
+
+        <TextView
+            android:id="@+id/row_text"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="bottom"
+            android:paddingTop="10dp"
+            android:text="@string/alerts"
+            android:textColor="@color/black_text"
+            android:textSize="18sp"/>
+
+        <TextView
+            android:id="@+id/row_subtext"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="5 warnings - 2 high risk patients, 3 residents, 2"
+            android:textColor="@color/dark_gray"
+            android:textSize="14sp"/>
+    </LinearLayout>
+
+    <Switch
+        android:id="@+id/enabled"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"/>
+</LinearLayout>
