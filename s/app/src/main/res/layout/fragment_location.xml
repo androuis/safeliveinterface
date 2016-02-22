@@ -1,0 +1,170 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.fragments.LocationFragment">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.pkmmte.view.CircularImageView
+                android:id="@+id/profile_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_margin="5dp" />
+
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/profile_image"
+                android:layout_toRightOf="@id/profile_image"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="John Doe" />
+
+            <TextView
+                android:id="@+id/profile_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/profile_image"
+                android:layout_alignStart="@id/profile_name"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="italic"
+                android:inputType="textMultiLine"
+                tools:text="221B Baker Street London" />
+
+            <View
+                android:id="@+id/horizontal_delimiter_1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/profile_image"
+                android:layout_margin="10dp"
+                android:background="@color/light_gray"/>
+
+            <LinearLayout
+                android:id="@+id/assignment_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/horizontal_delimiter_1"
+                android:layout_marginLeft="20dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="ASSIGNMENT"/>
+                <Switch
+                    android:id="@+id/assignment_switch"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/confirmation_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/horizontal_delimiter_1"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="20dp"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="CONFIRMATION"/>
+                <CheckBox
+                    android:id="@+id/confirmation_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"/>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/horizontal_delimiter_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/assignment_layout"
+                android:layout_margin="10dp"
+                android:background="@color/light_gray"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/horizontal_delimiter_2"
+                android:layout_marginBottom="5dp">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DISTANCE" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="300m" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="SPEED" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="5Km/H" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ACTIVITY" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Walking" />
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+        <fragment
+            android:id="@+id/map"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            class="com.google.android.gms.maps.SupportMapFragment" />
+    </android.support.v7.widget.CardView>
+
+</LinearLayout>
