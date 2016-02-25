@@ -51,3 +51,12 @@ s/app/hs_err_pid5432.log
 s/app/hs_err_pid7720.log
 s/app/replay_pid5432.log
 s/app/replay_pid7720.log
+
+# Android stuff
+s/.gradle/*
+s/local.properties
+s/.idea/*
+s/.DS_Store
+s/build/*
+s/captures
+*.iml
