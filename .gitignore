@@ -45,3 +45,9 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+s/.idea/misc.xml
+s/app/app.iml
+s/app/hs_err_pid5432.log
+s/app/hs_err_pid7720.log
+s/app/replay_pid5432.log
+s/app/replay_pid7720.log
