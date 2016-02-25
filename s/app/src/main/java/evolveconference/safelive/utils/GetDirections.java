@@ -16,7 +16,7 @@ import evolveconference.safelive.ui.fragments.LocationFragment;
 /**
  * Created by abacalu on 2/18/2016.
  */
-public class GetDirectionsAsyncTask extends AsyncTask<Map<String, LatLng>, Object, ArrayList> {
+public class GetDirections extends AsyncTask<Map<String, LatLng>, Object, ArrayList> {
     public static final String USER_CURRENT_START = "user_current_start";
     public static final String USER_CURRENT_END = "user_current_end";
     public static final String DIRECTIONS_MODE = "directions_mode";
@@ -24,7 +24,7 @@ public class GetDirectionsAsyncTask extends AsyncTask<Map<String, LatLng>, Objec
     private Exception exception;
     private ProgressDialog progressDialog;
 
-    public GetDirectionsAsyncTask(LocationFragment locationFragment)
+    public GetDirections(LocationFragment locationFragment)
     {
         super();
         this.locationFragment = locationFragment;
@@ -40,14 +40,16 @@ public class GetDirectionsAsyncTask extends AsyncTask<Map<String, LatLng>, Objec
     @Override
     public void onPostExecute(ArrayList result)
     {
-        progressDialog.dismiss();
-        if (exception == null)
-        {
-            locationFragment.handleGetDirectionsResult(result);
-        }
-        else
-        {
-            processException();
+        if (!isCancelled()) {
+            progressDialog.dismiss();
+            if (exception == null)
+            {
+                locationFragment.handleGetDirectionsResult(result);
+            }
+            else
+            {
+                processException();
+            }
         }
     }
 

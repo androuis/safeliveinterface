@@ -38,8 +38,7 @@ import evolveconference.safelive.model.ReadingList;
 import evolveconference.safelive.model.Resident;
 import evolveconference.safelive.model.ResidentList;
 import evolveconference.safelive.utils.AppConstants;
-import evolveconference.safelive.utils.GMapV2Direction;
-import evolveconference.safelive.utils.GetDirectionsAsyncTask;
+import evolveconference.safelive.utils.GetDirections;
 import evolveconference.safelive.utils.PrefUtil;
 
 /**
@@ -59,6 +58,9 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
     private SupportMapFragment mapFragment;
     private GoogleMap map;
     private List<LatLng> coordinates;
+    private GetPatientInfo getPatientInfo;
+    private GetCoordinates getCoordinates;
+    private GetDirections getDirections;
 
     public static LocationFragment newInstance(int id) {
         Bundle b = new Bundle();
@@ -74,7 +76,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
         if (getArguments() != null) {
             int patientId = getArguments().getInt(PATIENT_ID, -1);
             if (patientId != -1) {
-                new GetPatientInfo(patientId).execute();
+                getPatientInfo = new GetPatientInfo(patientId);
+                getPatientInfo.execute();
             }
         }
     }
@@ -99,9 +102,18 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        getPatientInfo.cancel(true);
+        getCoordinates.cancel(true);
+        getDirections.cancel(true);
+    }
+
+    @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-        new GetCoordinates("FDGGDAA12435G", "Location").execute();
+        getCoordinates = new GetCoordinates("FDGGDAA12435G", "Location");
+        getCoordinates.execute();
     }
 
     private void addMarkers(LatLng startPoint, LatLng endPoint) {
@@ -117,11 +129,11 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
 
     public void findDirections(LatLng startPoint, LatLng endPOint) {
         Map<String, LatLng> map = new HashMap<String, LatLng>();
-        map.put(GetDirectionsAsyncTask.USER_CURRENT_START, startPoint);
-        map.put(GetDirectionsAsyncTask.USER_CURRENT_END, endPOint);
+        map.put(GetDirections.USER_CURRENT_START, startPoint);
+        map.put(GetDirections.USER_CURRENT_END, endPOint);
 
-        GetDirectionsAsyncTask asyncTask = new GetDirectionsAsyncTask(this);
-        asyncTask.execute(map);
+        getDirections = new GetDirections(this);
+        getDirections.execute(map);
     }
 
     public void handleGetDirectionsResult(ArrayList<LatLng> directionPoints) {
@@ -171,12 +183,14 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
 
         @Override
         protected void onCompletion(boolean success) {
-            if (success) {
-                map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates.get(0), 16));
-                addMarkers(coordinates.get(0), coordinates.get(coordinates.size() - 1));
-                findDirections(coordinates.get(0), coordinates.get(coordinates.size() - 1));
-            } else {
-                displayLoginIfNeeded(getActivity(), exception);
+            if (!isCancelled()) {
+                if (success) {
+                    map.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates.get(0), 16));
+                    addMarkers(coordinates.get(0), coordinates.get(coordinates.size() - 1));
+                    findDirections(coordinates.get(0), coordinates.get(coordinates.size() - 1));
+                } else {
+                    displayLoginIfNeeded(getActivity(), exception);
+                }
             }
         }
 
@@ -219,10 +233,12 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
 
         @Override
         protected void onCompletion(boolean success) {
-            if (success) {
-                populateScreen();
-            } else {
-                displayLoginIfNeeded(getActivity(), exception);
+            if (!isCancelled()) {
+                if (success) {
+                    populateScreen();
+                } else {
+                    displayLoginIfNeeded(getActivity(), exception);
+                }
             }
         }
 
