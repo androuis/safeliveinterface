@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="3dp"
+    android:background="@android:color/white"
+    android:padding="7dp">
+
+    <ImageView
+        android:id="@+id/resident_image"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        tools:src="@drawable/face17" />
+
+    <TextView
+        android:id="@+id/resident_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@id/resident_image"
+        android:layout_marginStart="20dp"
+        android:layout_toEndOf="@id/resident_image"
+        android:layout_toStartOf="@+id/anomaly_time"
+        android:ellipsize="end"
+        android:singleLine="true"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        tools:text="Name" />
+
+    <TextView
+        android:id="@+id/anomaly_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/resident_image"
+        android:layout_alignEnd="@id/resident_name"
+        android:layout_alignStart="@id/resident_name"
+        tools:text="Anomaly" />
+
+    <TextView
+        android:id="@+id/anomaly_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/resident_image"
+        android:layout_alignParentEnd="true"
+        tools:text="time" />
+</RelativeLayout>

@@ -2,8 +2,8 @@
     <dimen name="activity_padding">5dp</dimen>
     <dimen name="activity_horizontal_padding">5dp</dimen>
     <dimen name="activity_vertical_padding">5dp</dimen>
-    <dimen name="activity_horizontal_margin">5dp</dimen>
-    <dimen name="activity_vertical_margin">5dp</dimen>
+    <dimen name="activity_horizontal_margin">10dp</dimen>
+    <dimen name="activity_vertical_margin">10dp</dimen>
     <dimen name="small">12sp</dimen>
     <dimen name="tab">10sp</dimen>
     <dimen name="medium_small">14sp</dimen>

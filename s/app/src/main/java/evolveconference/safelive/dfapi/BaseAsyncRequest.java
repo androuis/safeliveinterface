@@ -80,43 +80,7 @@ public class BaseAsyncRequest extends AsyncTask<Void, Void, Boolean> {
             // call the setup function
             doSetup();
 
-            // build the path to append onto the the instance url
-            String path = "/" + serviceName + "/" + endPoint;
-
-            // add sessionToken and API key into the header params
-            if(applicationApiKey == null || applicationApiKey.isEmpty()){
-                Log.w(callerName, "API key not provided");
-            }
-            else {
-                headerParams.put("X-DreamFactory-Api-Key", applicationApiKey);
-            }
-
-            if(sessionToken == null || sessionToken.isEmpty()){
-                Log.w(callerName, "session token not provided, only OK if logging in");
-            }
-            headerParams.put("X-DreamFactory-Session-Token", sessionToken);
-
-            // build the request body
-            if(requestBody != null){
-                if(requestString != null && !requestString.isEmpty()){
-                    Log.w(callerName, "supplied both a request body and request string " +
-                            "to BaseAsync task, overwriting request string with request body");
-                }
-                requestString = requestBody.toString();
-            }
-            if(use_logging) {
-                Log.v(callerName, "request string is: " + requestString);
-            }
-
-            // send the REST call
-            String response = ApiInvoker.getInstance().invokeAPI(baseInstanceUrl,
-                    path,
-                    verb,
-                    queryParams,
-                    requestString,
-                    headerParams,
-                    contentType,
-                    fileRequest);
+            String response = call();
 
             if(use_logging){
                 Log.v(callerName, "response string is: " + response);
@@ -140,6 +104,46 @@ public class BaseAsyncRequest extends AsyncTask<Void, Void, Boolean> {
             onError(e);
         }
         return false;
+    }
+
+    protected String call() throws ApiException, JSONException, Exception {
+        // build the path to append onto the the instance url
+        String path = "/" + serviceName + "/" + endPoint;
+
+        // add sessionToken and API key into the header params
+        if(applicationApiKey == null || applicationApiKey.isEmpty()){
+            Log.w(callerName, "API key not provided");
+        }
+        else {
+            headerParams.put("X-DreamFactory-Api-Key", applicationApiKey);
+        }
+
+        if(sessionToken == null || sessionToken.isEmpty()){
+            Log.w(callerName, "session token not provided, only OK if logging in");
+        }
+        headerParams.put("X-DreamFactory-Session-Token", sessionToken);
+
+        // build the request body
+        if(requestBody != null){
+            if(requestString != null && !requestString.isEmpty()){
+                Log.w(callerName, "supplied both a request body and request string " +
+                        "to BaseAsync task, overwriting request string with request body");
+            }
+            requestString = requestBody.toString();
+        }
+        if(use_logging) {
+            Log.v(callerName, "request string is: " + requestString);
+        }
+
+        // send the REST call
+        return ApiInvoker.getInstance().invokeAPI(baseInstanceUrl,
+                path,
+                verb,
+                queryParams,
+                requestString,
+                headerParams,
+                contentType,
+                fileRequest);
     }
 
     /**
@@ -173,7 +177,7 @@ public class BaseAsyncRequest extends AsyncTask<Void, Void, Boolean> {
      * @throws ApiException
      * @throws JSONException
      */
-    protected void processResponse(String response) throws ApiException, JSONException { }
+    protected void processResponse(String response) throws Exception { }
 
     /**
      * Called when the request completes, regardless of the result. Runs on the thread that invoked the request
