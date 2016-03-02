@@ -69,6 +69,9 @@ public class BaseAsyncRequest extends AsyncTask<Void, Void, Boolean> {
     // the ApiInvoker opens the file path from the FileRequest
     protected FileRequest fileRequest = null;
 
+    // needed to know what additional info to display if request fails
+    protected Exception exception;
+
     /**
      * Formats and sends the REST request
      * @param params not used
@@ -191,7 +194,9 @@ public class BaseAsyncRequest extends AsyncTask<Void, Void, Boolean> {
      * @param e exception thrown when trying to make the API call
      */
     protected void onError(Exception e) {
-        Log.e(callerName + "::baserequest::onError", e.toString());}
+        this.exception = e;
+        Log.e(callerName + "::baserequest::onError", e.toString());
+    }
 
     protected void displayLoginIfNeeded(Activity activity, Exception exception) {
         if (exception instanceof ApiException && ((ApiException) exception).getCode() == 401) {

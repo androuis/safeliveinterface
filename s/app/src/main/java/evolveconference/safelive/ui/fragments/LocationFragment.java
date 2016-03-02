@@ -38,6 +38,7 @@ import evolveconference.safelive.model.ReadingList;
 import evolveconference.safelive.model.Resident;
 import evolveconference.safelive.model.ResidentList;
 import evolveconference.safelive.utils.AppConstants;
+import evolveconference.safelive.utils.ComponentUtils;
 import evolveconference.safelive.utils.GetDirections;
 import evolveconference.safelive.utils.PrefUtil;
 
@@ -104,9 +105,15 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        getPatientInfo.cancel(true);
-        getCoordinates.cancel(true);
-        getDirections.cancel(true);
+        if (getPatientInfo != null) {
+            getPatientInfo.cancel(true);
+        }
+        if (getPatientInfo != null) {
+            getCoordinates.cancel(true);
+        }
+        if (getDirections != null) {
+            getDirections.cancel(true);
+        }
     }
 
     @Override
@@ -203,7 +210,6 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
 
     private class GetPatientInfo extends BaseAsyncRequest {
         private int patientId;
-        private Exception exception;
 
         public GetPatientInfo(int patientId) {
             this.patientId = patientId;
@@ -241,28 +247,18 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
                 }
             }
         }
-
-        @Override
-        protected void onError(Exception e) {
-            super.onError(e);
-            this.exception = e;
-        }
     }
 
     private void populateScreen() {
-        if (checkUIisOK()) {
+        if (ComponentUtils.checkUIisOK(this)) {
             Glide.with(getActivity())
                     .load(user.photo)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .error(android.R.drawable.ic_menu_myplaces)
                     .into(profileImage);
-            profileName.setText(user.firstName + " " + user.lastName);
+            profileName.setText(getString(R.string.first_and_last_names, user.firstName, user.lastName));
             profileLocation.setText(user.location);
         }
-    }
-
-    private boolean checkUIisOK() {
-        return getActivity() != null && !getActivity().isFinishing() && getView() != null;
     }
 
 }

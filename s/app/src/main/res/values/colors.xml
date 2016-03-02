@@ -54,9 +54,13 @@
     <color name="type_bkgnd_music">#88000000</color>
     <color name="type_bkgnd_unsupported">#88cccccc</color>
 
+
     <color name="yellow_dark">#E19A0C</color>
     <color name="yellow_light">#FAB518</color>
     <color name="red_dark">#D10F3A</color>
     <color name="red_light">#E51140</color>
     <color name="grey_light">#F7F7F7</color>
+    <color name="blue_light">#03A9F4</color>
+    <color name="blue_dark">#0288D1</color>
+>>>>>>> menu header
 </resources>

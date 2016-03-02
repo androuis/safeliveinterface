@@ -202,6 +202,8 @@ public class LoginActivity extends Activity {
     private void startMainActivity() {
         Intent i = new Intent();
         i.setClass(LoginActivity.this, MainActivity.class);
+        // TODO: remove hardcoded 1 and add instead the real staff id retrieved after login!
+        i.putExtra(MainActivity.PARAM_STAFF_ID, 1);
         startActivity(i);
         finish();
     }
