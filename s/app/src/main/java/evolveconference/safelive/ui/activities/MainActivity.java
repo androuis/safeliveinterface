@@ -119,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (currentFragment == null || !(currentFragment.getClass() == newFragment.getClass())) {
             FragmentTransaction ft = fm.beginTransaction();
             //ft.setCustomAnimations(R.anim.fade_in_quick_frag, R.anim.fade_out_quick_frag, R.anim.fade_in_quick_frag, R.anim.fade_out_quick_frag);
-            ft.addToBackStack("tag");
             ft.replace(R.id.frame, newFragment);
             ft.commit();
         }

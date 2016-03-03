@@ -8,13 +8,75 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/header_card_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.pkmmte.view.CircularImageView
+                    android:id="@+id/profile_image"
+                    android:layout_width="76dp"
+                    android:layout_height="76dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_margin="5dp"
+                    android:layout_marginStart="24dp" />
+
+                <TextView
+                    android:id="@+id/username"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@id/profile_image"
+                    android:layout_alignTop="@id/profile_image"
+                    android:text="Emili"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+                <View android:id="@+id/horizontal_delimiter"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/username"
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginBottom="4dp"
+                    android:layout_alignStart="@id/username"
+                    android:background="@android:color/darker_gray"/>
+
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/role"
+                    android:layout_alignStart="@+id/username"
+                    android:layout_marginBottom="8dp"
+                    android:text="New Residence, Brussels"
+                    android:textColor="#fff"
+                    android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/role"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignStart="@+id/email"
+                    android:layout_marginBottom="65dp"
+                    android:text="Nurse"
+                    android:textColor="#fff"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
             android:background="@color/grey_light">
 
             <LinearLayout
@@ -49,7 +111,8 @@
 
                 </LinearLayout>
 
-                <TextView android:id="@+id/details_alert"
+                <TextView
+                    android:id="@+id/details_alert"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
@@ -64,9 +127,8 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@color/grey_light"
-            app:cardElevation="5dp">
+            android:layout_margin="10dp"
+            android:background="@color/grey_light">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,7 +162,8 @@
 
                 </LinearLayout>
 
-                <TextView android:id="@+id/details_warning"
+                <TextView
+                    android:id="@+id/details_warning"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"

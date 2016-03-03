@@ -216,7 +216,7 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
     private void populateScreen() throws ParseException {
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
         populateAnomalies(alertsCount, alertsHolder, 0, format);
-        populateAnomalies(warningsCount, warningsHolder, 0, format);
+        populateAnomalies(warningsCount, warningsHolder, 1, format);
     }
 
     private void populateAnomalies(TextView anomaliesCount, LinearLayout anomaliesHolder, int anomaliesPosition, DateFormat anomalyTimestampFormat) throws ParseException {
