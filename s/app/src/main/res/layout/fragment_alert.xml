@@ -1,5 +1,4 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,7 +14,8 @@
             android:id="@+id/header_card_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp">
+            android:layout_margin="10dp"
+            android:visibility="gone">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -40,6 +40,7 @@
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
+
                 <View android:id="@+id/horizontal_delimiter"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -50,7 +51,7 @@
                     android:background="@android:color/darker_gray"/>
 
                 <TextView
-                    android:id="@+id/email"
+                    android:id="@+id/address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_above="@+id/role"
@@ -65,7 +66,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:layout_alignStart="@+id/email"
+                    android:layout_alignStart="@+id/address"
                     android:layout_marginBottom="65dp"
                     android:text="Nurse"
                     android:textColor="#fff"

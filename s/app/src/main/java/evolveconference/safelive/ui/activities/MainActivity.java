@@ -23,8 +23,6 @@ import org.json.JSONException;
 import java.util.Date;
 import java.util.HashMap;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import evolveconference.safelive.R;
 import evolveconference.safelive.dfapi.ApiException;
 import evolveconference.safelive.dfapi.ApiInvoker;
@@ -66,14 +64,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setupUI();
         setupData();
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        if (getStaffInfo != null) {
-            getStaffInfo.cancel(true);
-        }
     }
 
     private void setupUI() {
@@ -147,14 +137,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         if (HomeFragment.class == clazz) {
-            return new HomeFragment();
+            if (staff != null) {
+                return HomeFragment.newInstance(staff);
+            } else {
+                return HomeFragment.newInstance(getIntent().getIntExtra(PARAM_STAFF_ID, 0));
+            }
         }
 
         if (AlertFragment.class == clazz) {
             return new AlertFragment();
         }
 
-        return new HomeFragment();
+        if (staff != null) {
+            return HomeFragment.newInstance(staff);
+        } else {
+            return HomeFragment.newInstance(getIntent().getIntExtra(PARAM_STAFF_ID, 0));
+        }
     }
 
     @Override

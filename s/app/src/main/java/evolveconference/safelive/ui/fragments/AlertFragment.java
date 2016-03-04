@@ -2,6 +2,7 @@ package evolveconference.safelive.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
@@ -10,12 +11,14 @@ import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.pkmmte.view.CircularImageView;
 
 import org.json.JSONException;
 
@@ -28,6 +31,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import evolveconference.safelive.R;
 import evolveconference.safelive.SafeLiveApplication;
 import evolveconference.safelive.dfapi.ApiException;
@@ -44,7 +49,6 @@ import evolveconference.safelive.utils.PrefUtil;
 
 public class AlertFragment extends Fragment implements View.OnClickListener {
 
-    private SafeLiveApplication app;
     private GetAnomaliesAndResidents getAnomaliesAndResidents;
     private SparseArray<List<Pair<Anomaly, Resident>>> anomalyMap;
     private LinearLayout alertsHolder;
@@ -54,13 +58,12 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
     private TextView warningsCount;
     private TextView alertDetails;
     private TextView warningDetails;
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        app = (SafeLiveApplication) getActivity().getApplication();
-    }
+    //header
+    @Bind(R.id.header_card_view) CardView headerCardView;
+    @Bind(R.id.profile_image) CircularImageView profileImage;
+    @Bind(R.id.username) TextView username;
+    @Bind(R.id.address) TextView address;
+    @Bind(R.id.role) TextView role;
 
     @Override
     public void onResume() {
@@ -96,6 +99,7 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
         warningDetails.setOnClickListener(this);
         getAnomaliesAndResidents = new GetAnomaliesAndResidents();
         getAnomaliesAndResidents.execute();
+        ButterKnife.bind(this, view);
     }
 
     public void setAlert(View v) {

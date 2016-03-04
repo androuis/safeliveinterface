@@ -29,7 +29,7 @@ public class LoginActivity extends Activity {
     /**
      * View binding
      */
-    @Bind(R.id.email) AutoCompleteTextView mEmailView;
+    @Bind(R.id.address) AutoCompleteTextView mEmailView;
     @Bind(R.id.password) EditText mPasswordView;
     @Bind(R.id.login_progress) View mProgressView;
     @Bind(R.id.login_form) View mLoginFormView;
@@ -47,7 +47,7 @@ public class LoginActivity extends Activity {
 
         ButterKnife.bind(this);
 
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (AutoCompleteTextView) findViewById(R.id.address);
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override

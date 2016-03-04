@@ -1,6 +1,7 @@
 package evolveconference.safelive.dfapi;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -198,13 +199,13 @@ public class BaseAsyncRequest extends AsyncTask<Void, Void, Boolean> {
         Log.e(callerName + "::baserequest::onError", e.toString());
     }
 
-    protected void displayLoginIfNeeded(Activity activity, Exception exception) {
+    protected void displayLoginIfNeeded(Context context, Exception exception) {
         if (exception instanceof ApiException && ((ApiException) exception).getCode() == 401) {
-            PrefUtil.putString(activity.getApplicationContext(), AppConstants.SESSION_TOKEN, "");
-            Toast.makeText(activity, "Access token expired", Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(activity, LoginActivity.class);
+            PrefUtil.putString(context.getApplicationContext(), AppConstants.SESSION_TOKEN, "");
+            Toast.makeText(context, "Access token expired", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(context, LoginActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            activity.startActivity(intent);
+            context.startActivity(intent);
         }
     }
 }

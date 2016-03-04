@@ -21,7 +21,7 @@
         android:layout_toEndOf="@+id/profile_image"
         android:layout_marginStart="20dp"
         android:layout_centerVertical="true"
-        android:layout_above="@+id/email"
+        android:layout_above="@+id/address"
         android:paddingBottom="4dp"
         android:textColor="#FFF"
         android:textSize="14sp"
@@ -29,7 +29,7 @@
         android:textStyle="bold"/>
 
     <TextView
-        android:id="@+id/email"
+        android:id="@+id/address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignStart="@+id/username"
@@ -44,7 +44,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignStart="@+id/email"
+        android:layout_alignStart="@+id/address"
         android:layout_marginBottom="65dp"
         android:text="Nurse"
         android:textColor="#fff"
