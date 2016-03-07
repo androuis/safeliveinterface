@@ -15,20 +15,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pkmmte.view.CircularImageView;
-
-import org.json.JSONException;
+import com.squareup.picasso.Picasso;
 
 import java.util.Date;
-import java.util.HashMap;
 
 import evolveconference.safelive.R;
-import evolveconference.safelive.dfapi.ApiException;
-import evolveconference.safelive.dfapi.ApiInvoker;
-import evolveconference.safelive.dfapi.BaseAsyncRequest;
+import evolveconference.safelive.model.NursingHome;
 import evolveconference.safelive.model.Staff;
-import evolveconference.safelive.model.StaffList;
 import evolveconference.safelive.ui.fragments.AlertFragment;
 import evolveconference.safelive.ui.fragments.CircleDashboardFragment;
 import evolveconference.safelive.ui.fragments.DashboardFragment;
@@ -36,22 +30,23 @@ import evolveconference.safelive.ui.fragments.HomeFragment;
 import evolveconference.safelive.ui.fragments.PatientsFragment;
 import evolveconference.safelive.ui.fragments.SettingsFragment;
 import evolveconference.safelive.ui.fragments.StatisticsFragment;
-import evolveconference.safelive.utils.AppConstants;
 import evolveconference.safelive.utils.ComponentUtils;
-import evolveconference.safelive.utils.PrefUtil;
+import evolveconference.safelive.utils.GetStaffInfo;
+import evolveconference.safelive.utils.GetStaffInfoCallback;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GetStaffInfoCallback {
 
     public static final String PARAM_STAFF_ID = "staff_id";
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private Staff staff;
+    private NursingHome nursingHome;
     private GetStaffInfo getStaffInfo;
 
     CircularImageView profileImage;
     TextView username;
-    TextView role;
+    TextView address;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,12 +72,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void setupHeadetviews(View rootView) {
         profileImage = (CircularImageView) rootView.findViewById(R.id.profile_image);
         username = (TextView) rootView.findViewById(R.id.username);
-        role = (TextView) rootView.findViewById(R.id.role);
+        address = (TextView) rootView.findViewById(R.id.address);
     }
 
     private void setupData() {
         if (getIntent().hasExtra(PARAM_STAFF_ID)) {
-            getStaffInfo = new GetStaffInfo(getIntent().getIntExtra(PARAM_STAFF_ID, 0));
+            getStaffInfo = new GetStaffInfo(getIntent().getIntExtra(PARAM_STAFF_ID, 0), this);
             getStaffInfo.execute();
         }
     }
@@ -186,56 +181,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    private class GetStaffInfo extends BaseAsyncRequest {
-        private int staffId;
-
-        public GetStaffInfo(int staffId) {
-            this.staffId = staffId;
-        }
-
-        @Override
-        protected void doSetup() throws ApiException, JSONException {
-            callerName = "GetStaffInfo";
-
-            serviceName = AppConstants.DB_SVC;
-            endPoint = "staff";
-            verb = "GET";
-
-            // filter to only select the contacts in this group
-            queryParams = new HashMap<>();
-            queryParams.put("filter", "staffid=" + staffId);
-
-            // need to include the API key and session token
-            applicationApiKey = AppConstants.API_KEY;
-            sessionToken = PrefUtil.getString(getApplicationContext(), AppConstants.SESSION_TOKEN);
-        }
-
-        @Override
-        protected void processResponse(String response) throws ApiException, JSONException {
-            staff = ((StaffList) ApiInvoker.deserialize(response, "", StaffList.class)).record.get(0);
-        }
-
-        @Override
-        protected void onCompletion(boolean success) {
-            if (!isCancelled()) {
-                if (success) {
-                    populateScreen();
-                } else {
-                    displayLoginIfNeeded(MainActivity.this, exception);
-                }
-            }
-        }
-    }
-
-    private void populateScreen() {
+    public void populateScreen(Staff staff, NursingHome nursingHome) {
+        this.staff = staff;
+        this.nursingHome = nursingHome;
         if (ComponentUtils.checkUIisOK(this)) {
-            Glide.with(this)
-                    .load(staff.photo)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+            Picasso.with(this)
+                    .load(this.staff.photo)
                     .error(android.R.drawable.ic_menu_myplaces)
+                    .placeholder(android.R.drawable.ic_menu_myplaces)
                     .into(profileImage);
-            username.setText(getString(R.string.first_and_last_names, staff.firstName, staff.lastName));
-            role.setText(staff.position);
+            username.setText(getString(R.string.first_and_last_names, this.staff.firstName, this.staff.lastName));
+            //address.setText(this.nursingHome.nursinghomeaddress);
         }
     }
 }

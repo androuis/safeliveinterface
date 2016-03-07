@@ -70,5 +70,6 @@
     <string name="title_activity_maps">Map</string>
 
     <string name="first_and_last_names">%1$s %2$s</string>
+    <string name="role_at">%s at</string>
 
 </resources>

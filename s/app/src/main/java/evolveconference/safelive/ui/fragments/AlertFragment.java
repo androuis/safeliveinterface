@@ -2,6 +2,8 @@ package evolveconference.safelive.ui.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,6 +21,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pkmmte.view.CircularImageView;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 
@@ -49,6 +52,7 @@ import evolveconference.safelive.utils.PrefUtil;
 
 public class AlertFragment extends Fragment implements View.OnClickListener {
 
+    private static final int KEY_TIMESTAMP = 111;
     private GetAnomaliesAndResidents getAnomaliesAndResidents;
     private SparseArray<List<Pair<Anomaly, Resident>>> anomalyMap;
     private LinearLayout alertsHolder;
@@ -59,25 +63,16 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
     private TextView alertDetails;
     private TextView warningDetails;
     //header
-    @Bind(R.id.header_card_view) CardView headerCardView;
-    @Bind(R.id.profile_image) CircularImageView profileImage;
-    @Bind(R.id.username) TextView username;
-    @Bind(R.id.address) TextView address;
-    @Bind(R.id.role) TextView role;
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        getActivity().setTitle(R.string.alert_title);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (getAnomaliesAndResidents != null) {
-            getAnomaliesAndResidents.cancel(true);
-        }
-    }
+    @Bind(R.id.header_card_view)
+    CardView headerCardView;
+    @Bind(R.id.profile_image)
+    CircularImageView profileImage;
+    @Bind(R.id.username)
+    TextView username;
+    @Bind(R.id.address)
+    TextView address;
+    @Bind(R.id.role)
+    TextView role;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -89,6 +84,7 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        getActivity().setTitle(R.string.alert_title);
         alertsHolder = (LinearLayout) view.findViewById(R.id.holder_alerts);
         warningsHolder = (LinearLayout) view.findViewById(R.id.holder_warnings);
         alertsCount = (TextView) view.findViewById(R.id.count_alert);
@@ -102,43 +98,36 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
         ButterKnife.bind(this, view);
     }
 
-    public void setAlert(View v) {
-
-
-        List<Item> data = new ArrayList<>();
-
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.CHART));
-
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.HEADER,
-                "ALERTS history for HEART RATE", "5 Alerts (2 high risk patients)"));
-
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.HISTORY,
-                "Thomas Peeters  had a FALL", "3 Alerts in the last 15 minutes",
-                new Date()));
-
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.HISTORY,
-                "Mr. Peeters has been RUNNING excesively", "Running from 7h15 PM to 7h25 PM",
-                new Date()));
-
-        data.add(new ExpandableListAdapter.Item(ExpandableListAdapter.HISTORY,
-                "Mr. Peeters had high HEART RATE", "100 bmp during 15 minutes", new Date()));
-
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (getAnomaliesAndResidents != null) {
+            getAnomaliesAndResidents.cancel(true);
+        }
     }
 
     @Override
     public void onClick(View v) {
+        if (v.getTag(R.id.TAG_TIMESTAMP) != null) {
+            Fragment newFragment = HeartRateFragment.newInstance((String) v.getTag(KEY_TIMESTAMP), "");
+            FragmentManager fm = getChildFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            ft.add(newFragment, getClass().getSimpleName());
+            ft.commit();
+            fm.executePendingTransactions();
+        }
         switch (v.getId()) {
             case R.id.details_alert:
                 alertsHolder.setVisibility(alertsHolder.getVisibility() == View.VISIBLE ?
                         View.GONE : View.VISIBLE);
                 alertDetails.setCompoundDrawablesWithIntrinsicBounds(alertsHolder.getVisibility() == View.VISIBLE ?
-                        android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float, 0, 0, 0);
+                        R.drawable.ic_keyboard_arrow_up : R.drawable.ic_keyboard_arrow_down, 0, 0, 0);
                 break;
             case R.id.details_warning:
                 warningsHolder.setVisibility(warningsHolder.getVisibility() == View.VISIBLE ?
                         View.GONE : View.VISIBLE);
                 warningDetails.setCompoundDrawablesWithIntrinsicBounds(warningsHolder.getVisibility() == View.VISIBLE ?
-                        android.R.drawable.arrow_up_float : android.R.drawable.arrow_down_float, 0, 0, 0);
+                        R.drawable.ic_keyboard_arrow_up : R.drawable.ic_keyboard_arrow_down, 0, 0, 0);
                 break;
         }
     }
@@ -233,12 +222,15 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
             Date date = anomalyTimestampFormat.parse(anomalyPair.first.timestamp);
             ((TextView) anomaly.findViewById(R.id.anomaly_time)).setText(
                     DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS));
-            Glide.with(getActivity())
+            Picasso.with(getActivity())
                     .load(anomalyPair.second.photo)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .error(android.R.drawable.ic_menu_myplaces)
+                    .placeholder(android.R.drawable.ic_menu_myplaces)
+                    .fit()
                     .into((ImageView) anomaly.findViewById(R.id.resident_image));
             anomaliesHolder.addView(anomaly);
+            anomaly.setTag(R.id.TAG_TIMESTAMP, date.getTime());
+            anomaly.setOnClickListener(this);
         }
     }
 }

@@ -15,11 +15,13 @@ public class SafeLiveApplication extends Application {
 
     PatientRepository patientRepository;
     ProfileRepository profileRepository;
+    public static SafeLiveApplication instance;
 
     @Override
     public void onCreate() {
         MultiDex.install(this);
         super.onCreate();
+        instance = this;
         initCalligraphy();
         patientRepository = new PatientRepository();
         profileRepository = new ProfileRepository();

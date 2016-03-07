@@ -19,6 +19,8 @@ public class Staff implements Parcelable {
     public String photo = "";
     @JsonProperty("staffposition")
     public String position = "";
+    @JsonProperty("nursinghomeid")
+    public int nursinghomeid = 0;
 
     public Staff() {}
 
@@ -28,6 +30,7 @@ public class Staff implements Parcelable {
         lastName = in.readString();
         photo = in.readString();
         position = in.readString();
+        nursinghomeid = in.readInt();
     }
 
     public static final Creator<Staff> CREATOR = new Creator<Staff>() {
@@ -54,5 +57,6 @@ public class Staff implements Parcelable {
         dest.writeString(lastName);
         dest.writeString(photo);
         dest.writeString(position);
+        dest.writeInt(nursinghomeid);
     }
 }

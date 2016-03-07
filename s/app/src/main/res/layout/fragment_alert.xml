@@ -1,4 +1,5 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -27,50 +28,54 @@
                     android:layout_height="76dp"
                     android:layout_alignParentStart="true"
                     android:layout_margin="5dp"
-                    android:layout_marginStart="24dp" />
+                    android:layout_marginStart="24dp"
+                    app:border="true"
+                    app:border_color="@android:color/black"
+                    app:border_width="4dp"/>
 
                 <TextView
                     android:id="@+id/username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/profile_image"
                     android:layout_marginStart="20dp"
                     android:layout_toEndOf="@id/profile_image"
-                    android:layout_alignTop="@id/profile_image"
                     android:text="Emili"
                     android:textColor="@android:color/black"
                     android:textSize="14sp"
                     android:textStyle="bold" />
 
-                <View android:id="@+id/horizontal_delimiter"
+                <View
+                    android:id="@+id/horizontal_delimiter"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_below="@id/username"
-                    android:layout_marginEnd="20dp"
-                    android:layout_marginBottom="4dp"
                     android:layout_alignStart="@id/username"
-                    android:background="@android:color/darker_gray"/>
-
-                <TextView
-                    android:id="@+id/address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/role"
-                    android:layout_alignStart="@+id/username"
-                    android:layout_marginBottom="8dp"
-                    android:text="New Residence, Brussels"
-                    android:textColor="#fff"
-                    android:textSize="14sp" />
+                    android:layout_below="@id/username"
+                    android:layout_marginBottom="4dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@android:color/darker_gray" />
 
                 <TextView
                     android:id="@+id/role"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignStart="@+id/address"
-                    android:layout_marginBottom="65dp"
+                    android:layout_below="@id/horizontal_delimiter"
+                    android:layout_alignStart="@id/horizontal_delimiter"
+                    android:layout_marginBottom="8dp"
                     android:text="Nurse"
-                    android:textColor="#fff"
+                    android:textColor="@android:color/black"
                     android:textSize="14sp" />
+
+                <TextView
+                    android:id="@+id/address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/role"
+                    android:layout_alignStart="@id/role"
+                    android:text="New Residence, Brussels"
+                    android:textColor="@android:color/black"
+                    android:textSize="14sp" />
+
             </RelativeLayout>
         </android.support.v7.widget.CardView>
 
@@ -117,7 +122,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:drawableLeft="@android:drawable/arrow_down_float"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_down"
                     android:drawablePadding="5dp"
                     android:padding="5dp"
                     android:text="DETAILS"
@@ -168,7 +173,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
-                    android:drawableLeft="@android:drawable/arrow_down_float"
+                    android:drawableLeft="@drawable/ic_keyboard_arrow_down"
                     android:drawablePadding="5dp"
                     android:padding="5dp"
                     android:text="DETAILS"

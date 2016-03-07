@@ -253,8 +253,8 @@ public class LocationFragment extends Fragment implements OnMapReadyCallback {
         if (ComponentUtils.checkUIisOK(this)) {
             Glide.with(getActivity())
                     .load(user.photo)
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .error(android.R.drawable.ic_menu_myplaces)
+                    .placeholder(android.R.drawable.ic_menu_myplaces)
                     .into(profileImage);
             profileName.setText(getString(R.string.first_and_last_names, user.firstName, user.lastName));
             profileLocation.setText(user.location);
