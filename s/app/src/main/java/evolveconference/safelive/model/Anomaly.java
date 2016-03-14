@@ -20,4 +20,6 @@ public class Anomaly {
     public int eventType = 0;
     @JsonProperty("TypeOfAnomaly")
     public String anomaly = "";
+    @JsonProperty("readingid")
+    public int readingid = 0;
 }

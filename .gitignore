@@ -60,3 +60,4 @@ s/.DS_Store
 s/build/*
 s/captures
 *.iml
+*.apk

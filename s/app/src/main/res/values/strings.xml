@@ -71,5 +71,6 @@
 
     <string name="first_and_last_names">%1$s %2$s</string>
     <string name="role_at">%s at</string>
+    <string name="heart_rate_title">Heart Rate</string>
 
 </resources>

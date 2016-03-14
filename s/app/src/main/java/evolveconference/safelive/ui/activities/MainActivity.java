@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
@@ -26,6 +25,7 @@ import evolveconference.safelive.model.Staff;
 import evolveconference.safelive.ui.fragments.AlertFragment;
 import evolveconference.safelive.ui.fragments.CircleDashboardFragment;
 import evolveconference.safelive.ui.fragments.DashboardFragment;
+import evolveconference.safelive.ui.fragments.HeartRateFragment;
 import evolveconference.safelive.ui.fragments.HomeFragment;
 import evolveconference.safelive.ui.fragments.PatientsFragment;
 import evolveconference.safelive.ui.fragments.SettingsFragment;
@@ -33,8 +33,9 @@ import evolveconference.safelive.ui.fragments.StatisticsFragment;
 import evolveconference.safelive.utils.ComponentUtils;
 import evolveconference.safelive.utils.GetStaffInfo;
 import evolveconference.safelive.utils.GetStaffInfoCallback;
+import evolveconference.safelive.utils.StartHeartFragmentCallback;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GetStaffInfoCallback {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GetStaffInfoCallback, StartHeartFragmentCallback {
 
     public static final String PARAM_STAFF_ID = "staff_id";
 
@@ -193,5 +194,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             username.setText(getString(R.string.first_and_last_names, this.staff.firstName, this.staff.lastName));
             //address.setText(this.nursingHome.nursinghomeaddress);
         }
+    }
+
+    @Override
+    public void onCallback(int readingId, int residentId) {
+        HeartRateFragment heartRateFragment = HeartRateFragment.newInstance(readingId, residentId);
+        showFragment(heartRateFragment);
     }
 }

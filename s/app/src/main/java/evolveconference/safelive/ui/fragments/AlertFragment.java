@@ -1,25 +1,19 @@
 package evolveconference.safelive.ui.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
@@ -45,10 +39,9 @@ import evolveconference.safelive.model.Anomaly;
 import evolveconference.safelive.model.AnomalyList;
 import evolveconference.safelive.model.Resident;
 import evolveconference.safelive.model.ResidentList;
-import evolveconference.safelive.ui.adapters.ExpandableListAdapter;
-import evolveconference.safelive.ui.adapters.ExpandableListAdapter.Item;
 import evolveconference.safelive.utils.AppConstants;
 import evolveconference.safelive.utils.PrefUtil;
+import evolveconference.safelive.utils.StartHeartFragmentCallback;
 
 public class AlertFragment extends Fragment implements View.OnClickListener {
 
@@ -73,6 +66,17 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
     TextView address;
     @Bind(R.id.role)
     TextView role;
+    private StartHeartFragmentCallback startHeartFragmentCallback;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            startHeartFragmentCallback = (StartHeartFragmentCallback) activity;
+        } catch (ClassCastException ex) {
+            throw new ClassCastException("Activity starting this fragment must be instanceof StartHeartFragmentCallback");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,13 +112,8 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v.getTag(R.id.TAG_TIMESTAMP) != null) {
-            Fragment newFragment = HeartRateFragment.newInstance((String) v.getTag(KEY_TIMESTAMP), "");
-            FragmentManager fm = getChildFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.add(newFragment, getClass().getSimpleName());
-            ft.commit();
-            fm.executePendingTransactions();
+        if (v.getTag(R.id.TAG_READINGID) != null) {
+            startHeartFragmentCallback.onCallback((Integer) v.getTag(R.id.TAG_READINGID), (Integer) v.getTag(R.id.TAG_RESIDENTID));
         }
         switch (v.getId()) {
             case R.id.details_alert:
@@ -165,7 +164,7 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
             queryParams = new HashMap<>();
             StringBuilder sb = new StringBuilder();
             for (Anomaly anomaly : anomalyList.record) {
-                sb.append(anomaly.id).append(",");
+                sb.append(anomaly.residentId).append(",");
             }
             sb.deleteCharAt(sb.length() - 1);
             queryParams.put("ids", sb.toString());
@@ -207,30 +206,32 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
     }
 
     private void populateScreen() throws ParseException {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-        populateAnomalies(alertsCount, alertsHolder, 0, format);
-        populateAnomalies(warningsCount, warningsHolder, 1, format);
+        populateAnomalies(alertsCount, alertsHolder, 0);
+        populateAnomalies(warningsCount, warningsHolder, 1);
     }
 
-    private void populateAnomalies(TextView anomaliesCount, LinearLayout anomaliesHolder, int anomaliesPosition, DateFormat anomalyTimestampFormat) throws ParseException {
-        anomaliesCount.setText(String.valueOf(anomalyMap.get(anomaliesPosition).size()));
-        for (Pair<Anomaly, Resident> anomalyPair : anomalyMap.get(anomaliesPosition)) {
-            View anomaly = inflater.inflate(R.layout.anomaly_list_item, anomaliesHolder, false);
-            ((TextView) anomaly.findViewById(R.id.resident_name))
-                    .setText(String.format("%s %s", anomalyPair.second.firstName, anomalyPair.second.lastName));
-            ((TextView) anomaly.findViewById(R.id.anomaly_type)).setText(anomalyPair.first.anomaly);
-            Date date = anomalyTimestampFormat.parse(anomalyPair.first.timestamp);
-            ((TextView) anomaly.findViewById(R.id.anomaly_time)).setText(
-                    DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS));
-            Picasso.with(getActivity())
-                    .load(anomalyPair.second.photo)
-                    .error(android.R.drawable.ic_menu_myplaces)
-                    .placeholder(android.R.drawable.ic_menu_myplaces)
-                    .fit()
-                    .into((ImageView) anomaly.findViewById(R.id.resident_image));
-            anomaliesHolder.addView(anomaly);
-            anomaly.setTag(R.id.TAG_TIMESTAMP, date.getTime());
-            anomaly.setOnClickListener(this);
+    private void populateAnomalies(TextView anomaliesCount, LinearLayout anomaliesHolder, int anomaliesPosition) throws ParseException {
+        if (anomalyMap.size() > anomaliesPosition) {
+            anomaliesCount.setText(String.valueOf(anomalyMap.get(anomaliesPosition).size()));
+            for (Pair<Anomaly, Resident> anomalyPair : anomalyMap.get(anomaliesPosition)) {
+                View anomaly = inflater.inflate(R.layout.anomaly_list_item, anomaliesHolder, false);
+                ((TextView) anomaly.findViewById(R.id.resident_name))
+                        .setText(String.format("%s %s", anomalyPair.second.firstName, anomalyPair.second.lastName));
+                ((TextView) anomaly.findViewById(R.id.anomaly_type)).setText(anomalyPair.first.anomaly);
+                Date date = SafeLiveApplication.anomalyTimestampFormatter.parse(anomalyPair.first.timestamp);
+                ((TextView) anomaly.findViewById(R.id.anomaly_time)).setText(
+                        DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS));
+                Picasso.with(getActivity())
+                        .load(anomalyPair.second.photo)
+                        .error(android.R.drawable.ic_menu_myplaces)
+                        .placeholder(android.R.drawable.ic_menu_myplaces)
+                        .fit()
+                        .into((ImageView) anomaly.findViewById(R.id.resident_image));
+                anomaliesHolder.addView(anomaly);
+                anomaly.setTag(R.id.TAG_READINGID, anomalyPair.first.readingid);
+                anomaly.setTag(R.id.TAG_RESIDENTID, anomalyPair.second.id);
+                anomaly.setOnClickListener(this);
+            }
         }
     }
 }
