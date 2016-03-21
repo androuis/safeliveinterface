@@ -14,7 +14,6 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
@@ -23,6 +22,7 @@ import java.util.Date;
 import evolveconference.safelive.R;
 import evolveconference.safelive.model.NursingHome;
 import evolveconference.safelive.model.Staff;
+import evolveconference.safelive.ui.fragments.ActivitiesFragment;
 import evolveconference.safelive.ui.fragments.AlertFragment;
 import evolveconference.safelive.ui.fragments.CircleDashboardFragment;
 import evolveconference.safelive.ui.fragments.DashboardFragment;
@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private Staff staff;
-    private NursingHome nursingHome;
     private GetStaffInfo getStaffInfo;
 
     CircularImageView profileImage;
@@ -183,7 +182,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public void populateScreen(Staff staff, NursingHome nursingHome) {
         this.staff = staff;
-        this.nursingHome = nursingHome;
+        NursingHome nursingHome1 = nursingHome;
         if (ComponentUtils.checkUIisOK(this)) {
             Picasso.with(this)
                     .load(this.staff.photo)

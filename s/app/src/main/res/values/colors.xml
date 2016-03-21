@@ -62,4 +62,6 @@
     <color name="grey_light">#F7F7F7</color>
     <color name="blue_light">#03A9F4</color>
     <color name="blue_dark">#0288D1</color>
+    <color name="text_black_color">#414142</color>
+    <color name="black_color_transparent">#64000000</color>
 </resources>

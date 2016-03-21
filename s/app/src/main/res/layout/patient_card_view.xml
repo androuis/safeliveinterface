@@ -1,48 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="10dp"
-    android:layout_marginRight="10dp"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:gravity="center"
     android:padding="5dp">
+
+    <ImageView
+        android:id="@+id/patient_avatar"
+        android:layout_width="@dimen/picture_size"
+        android:layout_height="@dimen/picture_size"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/user_empty_placeholder" />
 
     <TextView
         android:id="@+id/patient_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@id/patient_avatar"
         android:gravity="center"
-        android:text="Emilia"
-        android:textStyle="bold"/>
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:background="@color/black_color_transparent"/>
 
-    <evolveconference.safelive.ui.view.RoundImageView
-        android:id="@+id/patient_avatar"
-        android:layout_width="65dp"
-        android:layout_height="65dp"
-        android:src="@drawable/old1"/>
+    <TextView
+        android:id="@+id/patient_alert_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/patient_avatar"
+        android:gravity="center"
+        android:layout_marginBottom="5dp"
+        android:background="@drawable/circle_red" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal">
+    <TextView
+        android:id="@+id/patient_warning_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@id/patient_avatar"
+        android:layout_below="@id/patient_alert_count"
+        android:gravity="center"
+        android:background="@drawable/circle_yellow" />
 
-        <ImageView
-            android:id="@+id/patient_warning_left"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="left"
-            android:src="@drawable/ic_warning"/>
-
-
-        <ImageView
-            android:id="@+id/patient_warning_right"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_gravity="right"
-            android:src="@drawable/ic_warning_red"/>
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

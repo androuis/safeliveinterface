@@ -8,6 +8,9 @@ import java.util.List;
  * Created by abacalu on 2/18/2016.
  */
 public class Resident {
+    public static final int RISK_HIGH = 0;
+    public static final int RISK_NORMAL = 1;
+
     @JsonProperty("resid")
     public int id = 0;
     @JsonProperty("resfirstname")

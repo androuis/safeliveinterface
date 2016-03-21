@@ -165,7 +165,7 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
             queryParams = new HashMap<>();
             StringBuilder sb = new StringBuilder();
             for (Anomaly anomaly : anomalyList.record) {
-                sb.append(anomaly.id).append(",");
+                sb.append(anomaly.residentId).append(",");
             }
             sb.deleteCharAt(sb.length() - 1);
             queryParams.put("ids", sb.toString());
@@ -213,24 +213,27 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
     }
 
     private void populateAnomalies(TextView anomaliesCount, LinearLayout anomaliesHolder, int anomaliesPosition, DateFormat anomalyTimestampFormat) throws ParseException {
-        anomaliesCount.setText(String.valueOf(anomalyMap.get(anomaliesPosition).size()));
-        for (Pair<Anomaly, Resident> anomalyPair : anomalyMap.get(anomaliesPosition)) {
-            View anomaly = inflater.inflate(R.layout.anomaly_list_item, anomaliesHolder, false);
-            ((TextView) anomaly.findViewById(R.id.resident_name))
-                    .setText(String.format("%s %s", anomalyPair.second.firstName, anomalyPair.second.lastName));
-            ((TextView) anomaly.findViewById(R.id.anomaly_type)).setText(anomalyPair.first.anomaly);
-            Date date = anomalyTimestampFormat.parse(anomalyPair.first.timestamp);
-            ((TextView) anomaly.findViewById(R.id.anomaly_time)).setText(
-                    DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS));
-            Picasso.with(getActivity())
-                    .load(anomalyPair.second.photo)
-                    .error(android.R.drawable.ic_menu_myplaces)
-                    .placeholder(android.R.drawable.ic_menu_myplaces)
-                    .fit()
-                    .into((ImageView) anomaly.findViewById(R.id.resident_image));
-            anomaliesHolder.addView(anomaly);
-            anomaly.setTag(R.id.TAG_TIMESTAMP, date.getTime());
-            anomaly.setOnClickListener(this);
+        List<Pair<Anomaly, Resident>> anomalies = anomalyMap.get(anomaliesPosition);
+        if (anomalies != null) {
+            anomaliesCount.setText(String.valueOf(anomalies.size()));
+            for (Pair<Anomaly, Resident> anomalyPair : anomalies) {
+                View anomaly = inflater.inflate(R.layout.anomaly_list_item, anomaliesHolder, false);
+                ((TextView) anomaly.findViewById(R.id.resident_name))
+                        .setText(String.format("%s %s", anomalyPair.second.firstName, anomalyPair.second.lastName));
+                ((TextView) anomaly.findViewById(R.id.anomaly_type)).setText(anomalyPair.first.anomaly);
+                Date date = anomalyTimestampFormat.parse(anomalyPair.first.timestamp);
+                ((TextView) anomaly.findViewById(R.id.anomaly_time)).setText(
+                        DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS));
+                Picasso.with(getActivity())
+                        .load(anomalyPair.second.photo)
+                        .error(android.R.drawable.ic_menu_myplaces)
+                        .placeholder(android.R.drawable.ic_menu_myplaces)
+                        .fit()
+                        .into((ImageView) anomaly.findViewById(R.id.resident_image));
+                anomaliesHolder.addView(anomaly);
+                anomaly.setTag(R.id.TAG_TIMESTAMP, date.getTime());
+                anomaly.setOnClickListener(this);
+            }
         }
     }
 }

@@ -126,8 +126,8 @@ public class ExpandablePatientsAdapter extends RecyclerView.Adapter<RecyclerView
     class PatientCardViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.patient_name) TextView name;
         @Bind(R.id.patient_avatar) RoundImageView avatar;
-        @Bind(R.id.patient_warning_left) ImageView alertLeft;
-        @Bind(R.id.patient_warning_right) ImageView alertRight;
+        @Bind(R.id.patient_alert_count) ImageView alertLeft;
+        @Bind(R.id.patient_warning_count) ImageView alertRight;
 
         public PatientCardViewHolder(View profileView) {
             super(profileView);

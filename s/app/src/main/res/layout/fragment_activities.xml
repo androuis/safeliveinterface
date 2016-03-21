@@ -1,0 +1,252 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:scrollbarStyle="outsideOverlay">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        tools:context="evolveconference.safelive.ui.fragments.ActivitiesFragment">
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
+
+                <com.pkmmte.view.CircularImageView
+                    android:id="@+id/resident_image"
+                    android:layout_width="@dimen/picture_size"
+                    android:layout_height="@dimen/picture_size"
+                    android:layout_margin="5dp" />
+
+                <ImageView
+                    android:id="@+id/anomaly_image"
+                    android:layout_width="@dimen/picture_size"
+                    android:layout_height="@dimen/picture_size"
+                    android:layout_alignTop="@id/resident_image"
+                    android:layout_toEndOf="@id/resident_image"
+                    android:layout_marginEnd="5dp"
+                    android:layout_marginStart="5dp"
+                    android:src="@drawable/ic_error_24dp" />
+
+                <TextView
+                    android:id="@+id/resident_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/anomaly_image"
+                    android:layout_alignTop="@id/resident_image"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+
+                <TextView
+                    android:id="@+id/resident_location"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/resident_name"
+                    android:layout_toEndOf="@id/anomaly_image"
+                    android:layout_alignBottom="@id/resident_image"/>
+
+                <View
+                    android:id="@+id/horizontal_delimiter"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/resident_image"
+                    android:background="@color/light_gray" />
+
+                <TextView
+                    android:id="@+id/resident_activity_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/horizontal_delimiter"
+                    android:layout_centerHorizontal="true"
+                    android:layout_margin="5dp"
+                    android:maxLines="1"
+                    android:text="@string/current_activity" />
+
+                <TextView
+                    android:id="@+id/resident_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/resident_activity_title"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@android:color/black"
+                    android:textSize="16sp"
+                    android:textAllCaps="true" />
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:layout_margin="10dp">
+
+                <evolveconference.safelive.ui.view.Circle
+                    android:id="@+id/circle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center" />
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp">
+
+                <TextView
+                    android:id="@+id/footsteps_key"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TOTAL FOOTSTEPS" />
+
+                <TextView
+                    android:id="@+id/footsteps_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true" />
+
+                <LinearLayout
+                    android:id="@+id/footsteps_value_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_below="@id/footsteps_value"
+                    android:layout_marginStart="10dp"
+                    android:gravity="end"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/footsteps_value_midnight"
+                        style="@style/footstepsTextView" />
+
+                    <TextView
+                        android:id="@+id/footsteps_value_morning"
+                        style="@style/footstepsTextView" />
+
+                    <TextView
+                        android:id="@+id/footsteps_value_noon"
+                        style="@style/footstepsTextView" />
+
+                    <TextView
+                        android:id="@+id/footsteps_value_afternoon"
+                        style="@style/footstepsTextView" />
+
+                    <TextView
+                        android:id="@+id/footsteps_value_evening"
+                        style="@style/footstepsTextView" />
+
+                    <TextView
+                        android:id="@+id/footsteps_value_night"
+                        style="@style/footstepsTextView" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/footsteps_key"
+                    android:layout_toStartOf="@id/footsteps_value_layout"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/footsteps_key_midnight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MIDNIGHT" />
+
+                    <ProgressBar
+                        android:id="@+id/footsteps_progress_midnight"
+                        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:progressBackgroundTint="@android:color/transparent"
+                        android:progressTint="@color/black" />
+
+                    <TextView
+                        android:id="@+id/footsteps_key_morning"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="MORNING" />
+
+                    <ProgressBar
+                        android:id="@+id/footsteps_progress_morning"
+                        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:progressBackgroundTint="@android:color/transparent"
+                        android:progressTint="@color/black" />
+
+                    <TextView
+                        android:id="@+id/footsteps_key_noon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="NOON" />
+
+                    <ProgressBar
+                        android:id="@+id/footsteps_progress_noon"
+                        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:progressBackgroundTint="@android:color/transparent"
+                        android:progressTint="@color/black" />
+
+                    <TextView
+                        android:id="@+id/footsteps_key_afternoon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AFTERNOON" />
+
+                    <ProgressBar
+                        android:id="@+id/footsteps_progress_afternoon"
+                        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:progressBackgroundTint="@android:color/transparent"
+                        android:progressTint="@color/black" />
+
+                    <TextView
+                        android:id="@+id/footsteps_key_evening"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="EVENING" />
+
+                    <ProgressBar
+                        android:id="@+id/footsteps_progress_evening"
+                        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:progressBackgroundTint="@android:color/transparent"
+                        android:progressTint="@color/black" />
+
+                    <TextView
+                        android:id="@+id/footsteps_key_night"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="NIGHT" />
+
+                    <ProgressBar
+                        android:id="@+id/footsteps_progress_night"
+                        style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:progressBackgroundTint="@android:color/transparent"
+                        android:progressTint="@color/black" />
+                </LinearLayout>
+            </RelativeLayout>
+
+        </android.support.v7.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

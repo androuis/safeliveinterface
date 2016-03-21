@@ -21,6 +21,9 @@
     <dimen name="dashboard_button">10sp</dimen>
     <dimen name="da_drawable_text_padding">10dp</dimen>
 
+    <dimen name="picture_size">110dp</dimen>
+    <dimen name="picture_size_small">50dp</dimen>
+
     <!-- Per the design guidelines, navigation drawers should be between 240dp and 320dp:
          https://developer.android.com/design/patterns/navigation-drawer.html -->
     <dimen name="navigation_drawer_width">240dp</dimen>
