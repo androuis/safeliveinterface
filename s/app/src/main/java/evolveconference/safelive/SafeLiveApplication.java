@@ -3,7 +3,10 @@ package evolveconference.safelive;
 import android.app.Application;
 import android.support.multidex.MultiDex;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 import evolveconference.safelive.model.Patient;
 import evolveconference.safelive.model.Profile;
@@ -16,6 +19,8 @@ public class SafeLiveApplication extends Application {
     PatientRepository patientRepository;
     ProfileRepository profileRepository;
     public static SafeLiveApplication instance;
+    public  static DateFormat anomalyTimestampFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+
 
     @Override
     public void onCreate() {
