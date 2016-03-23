@@ -60,5 +60,8 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.6.0-rc3'
     compile 'com.pkmmte.view:circularimageview:1.1'
-    compile project(':GraphView')
+    //compile project(':GraphView')
+
+    compile 'com.github.wendykierp:JTransforms:3.1'
+    compile 'pl.edu.icm:JLargeArrays:1.4'
 }
