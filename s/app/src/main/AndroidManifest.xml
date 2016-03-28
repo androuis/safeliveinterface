@@ -60,7 +60,7 @@
             android:label="@string/title_activity_maps"/>
 
         <service
-            android:name=".utils.RecordIntentService"
+            android:name=".tasks.RecordIntentService"
             android:exported="false">
         </service>
     </application>
