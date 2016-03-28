@@ -3,15 +3,14 @@ package evolveconference.safelive.ui.fragments;
 import android.os.Bundle;
 import android.view.View;
 
-import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 
 import evolveconference.safelive.R;
 import evolveconference.safelive.model.NursingHome;
 import evolveconference.safelive.model.Staff;
 import evolveconference.safelive.utils.ComponentUtils;
-import evolveconference.safelive.utils.GetStaffInfo;
-import evolveconference.safelive.utils.GetStaffInfoCallback;
+import evolveconference.safelive.tasks.GetStaffInfo;
+import evolveconference.safelive.callbacks.tasks.GetStaffInfoCallback;
 
 public class HomeFragment extends AlertFragment implements GetStaffInfoCallback {
 

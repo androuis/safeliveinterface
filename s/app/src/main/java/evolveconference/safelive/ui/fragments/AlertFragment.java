@@ -1,38 +1,30 @@
 package evolveconference.safelive.ui.fragments;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.pkmmte.view.CircularImageView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
 
-import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -45,14 +37,14 @@ import evolveconference.safelive.model.Anomaly;
 import evolveconference.safelive.model.AnomalyList;
 import evolveconference.safelive.model.Resident;
 import evolveconference.safelive.model.ResidentList;
-import evolveconference.safelive.ui.adapters.ExpandableListAdapter;
-import evolveconference.safelive.ui.adapters.ExpandableListAdapter.Item;
 import evolveconference.safelive.utils.AppConstants;
 import evolveconference.safelive.utils.PrefUtil;
+import evolveconference.safelive.callbacks.fragments.StartHeartFragmentCallback;
 
 public class AlertFragment extends Fragment implements View.OnClickListener {
 
-    private static final int KEY_TIMESTAMP = 111;
+    private static final String TAG = AlertFragment.class.getSimpleName();
+
     private GetAnomaliesAndResidents getAnomaliesAndResidents;
     private SparseArray<List<Pair<Anomaly, Resident>>> anomalyMap;
     private LinearLayout alertsHolder;
@@ -73,6 +65,18 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
     TextView address;
     @Bind(R.id.role)
     TextView role;
+
+    private StartHeartFragmentCallback startHeartFragmentCallback;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            startHeartFragmentCallback = (StartHeartFragmentCallback) activity;
+        } catch (ClassCastException e) {
+            Log.e(TAG, "Starting activity must implement StartHeartFragmentCallback");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -108,13 +112,8 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if (v.getTag(R.id.TAG_TIMESTAMP) != null) {
-            Fragment newFragment = HeartRateFragment.newInstance((String) v.getTag(KEY_TIMESTAMP), "");
-            FragmentManager fm = getChildFragmentManager();
-            FragmentTransaction ft = fm.beginTransaction();
-            ft.add(newFragment, getClass().getSimpleName());
-            ft.commit();
-            fm.executePendingTransactions();
+        if (v.getTag(R.id.TAG_READINGID) != null) {
+            startHeartFragmentCallback.onCallback((int) v.getTag(R.id.TAG_READINGID), (int) v.getTag(R.id.TAG_RESIDENTID));
         }
         switch (v.getId()) {
             case R.id.details_alert:
@@ -207,12 +206,11 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
     }
 
     private void populateScreen() throws ParseException {
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
-        populateAnomalies(alertsCount, alertsHolder, 0, format);
-        populateAnomalies(warningsCount, warningsHolder, 1, format);
+        populateAnomalies(alertsCount, alertsHolder, 0);
+        populateAnomalies(warningsCount, warningsHolder, 1);
     }
 
-    private void populateAnomalies(TextView anomaliesCount, LinearLayout anomaliesHolder, int anomaliesPosition, DateFormat anomalyTimestampFormat) throws ParseException {
+    private void populateAnomalies(TextView anomaliesCount, LinearLayout anomaliesHolder, int anomaliesPosition) throws ParseException {
         List<Pair<Anomaly, Resident>> anomalies = anomalyMap.get(anomaliesPosition);
         if (anomalies != null) {
             anomaliesCount.setText(String.valueOf(anomalies.size()));
@@ -221,7 +219,7 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
                 ((TextView) anomaly.findViewById(R.id.resident_name))
                         .setText(String.format("%s %s", anomalyPair.second.firstName, anomalyPair.second.lastName));
                 ((TextView) anomaly.findViewById(R.id.anomaly_type)).setText(anomalyPair.first.anomaly);
-                Date date = anomalyTimestampFormat.parse(anomalyPair.first.timestamp);
+                Date date = SafeLiveApplication.anomalyTimestampFormatter.parse(anomalyPair.first.timestamp);
                 ((TextView) anomaly.findViewById(R.id.anomaly_time)).setText(
                         DateUtils.getRelativeTimeSpanString(date.getTime(), System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS));
                 Picasso.with(getActivity())
@@ -231,7 +229,8 @@ public class AlertFragment extends Fragment implements View.OnClickListener {
                         .fit()
                         .into((ImageView) anomaly.findViewById(R.id.resident_image));
                 anomaliesHolder.addView(anomaly);
-                anomaly.setTag(R.id.TAG_TIMESTAMP, date.getTime());
+                anomaly.setTag(R.id.TAG_READINGID, anomalyPair.first.readingid);
+                anomaly.setTag(R.id.TAG_RESIDENTID, anomalyPair.second.id);
                 anomaly.setOnClickListener(this);
             }
         }

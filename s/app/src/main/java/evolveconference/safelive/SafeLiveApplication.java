@@ -1,6 +1,7 @@
 package evolveconference.safelive;
 
 import android.app.Application;
+import android.content.Intent;
 import android.support.multidex.MultiDex;
 
 import java.text.DateFormat;
@@ -12,6 +13,8 @@ import evolveconference.safelive.model.Patient;
 import evolveconference.safelive.model.Profile;
 import evolveconference.safelive.repository.PatientRepository;
 import evolveconference.safelive.repository.ProfileRepository;
+import evolveconference.safelive.tasks.RecordIntentService;
+import evolveconference.safelive.utils.LimitedQueue;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class SafeLiveApplication extends Application {
@@ -19,8 +22,10 @@ public class SafeLiveApplication extends Application {
     PatientRepository patientRepository;
     ProfileRepository profileRepository;
     public static SafeLiveApplication instance;
-    public  static DateFormat anomalyTimestampFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
+    public static DateFormat anomalyTimestampFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
+    private static final int LIMIT_QUEUE = 3;
+    private LimitedQueue limitedQueue = new LimitedQueue(LIMIT_QUEUE);
 
     @Override
     public void onCreate() {
@@ -30,6 +35,10 @@ public class SafeLiveApplication extends Application {
         initCalligraphy();
         patientRepository = new PatientRepository();
         profileRepository = new ProfileRepository();
+
+        Intent intent = new Intent(this, RecordIntentService.class);
+        intent.setAction(RecordIntentService.ACTION_START_RECORDING);
+        startService(intent);
     }
 
     private void initCalligraphy() {
@@ -40,10 +49,17 @@ public class SafeLiveApplication extends Application {
         );
     }
 
+    public LimitedQueue getLimitedQueue() {
+        return new LimitedQueue<>(limitedQueue);
+    }
+
+    public void addToLimitQueue(Object element) {
+        limitedQueue.add(element);
+    }
+
     public List<Patient> getPatients(){
         return patientRepository.getPatients();
     }
-
 
     public Profile getProfile() {
         return profileRepository.getProfile();

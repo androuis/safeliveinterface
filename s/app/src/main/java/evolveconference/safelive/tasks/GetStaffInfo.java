@@ -1,4 +1,4 @@
-package evolveconference.safelive.utils;
+package evolveconference.safelive.tasks;
 
 import org.json.JSONException;
 
@@ -12,6 +12,9 @@ import evolveconference.safelive.model.NursingHome;
 import evolveconference.safelive.model.NursingHomeList;
 import evolveconference.safelive.model.Staff;
 import evolveconference.safelive.model.StaffList;
+import evolveconference.safelive.utils.AppConstants;
+import evolveconference.safelive.callbacks.tasks.GetStaffInfoCallback;
+import evolveconference.safelive.utils.PrefUtil;
 
 /**
  * Created by andrei on 05/03/16.

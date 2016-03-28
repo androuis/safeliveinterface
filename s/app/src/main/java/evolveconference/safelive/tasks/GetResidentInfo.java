@@ -1,4 +1,4 @@
-package evolveconference.safelive.utils;
+package evolveconference.safelive.tasks;
 
 import org.json.JSONException;
 
@@ -6,11 +6,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import evolveconference.safelive.SafeLiveApplication;
+import evolveconference.safelive.callbacks.tasks.GetResidentInfoCallback;
 import evolveconference.safelive.dfapi.ApiException;
 import evolveconference.safelive.dfapi.ApiInvoker;
 import evolveconference.safelive.dfapi.BaseAsyncRequest;
 import evolveconference.safelive.model.Resident;
 import evolveconference.safelive.model.ResidentList;
+import evolveconference.safelive.utils.AppConstants;
+import evolveconference.safelive.utils.PrefUtil;
 
 /**
  * Created by andrei on 05/03/16.

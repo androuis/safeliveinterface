@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import evolveconference.safelive.R;
 import evolveconference.safelive.ui.activities.MainActivity;
 import evolveconference.safelive.ui.fragments.DetailPatientFragment;
+import evolveconference.safelive.ui.fragments.PatientHomepageFragment;
 
 /**
  * Adapter fot Patients screen
@@ -176,7 +177,7 @@ public class GridPatientsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         @Override
         public void onClick(View v) {
             Item item = (Item) mItems.get(getAdapterPosition()).getValue();
-            ((MainActivity) mContext).showFragment(DetailPatientFragment.newInstance(item.id));
+            ((MainActivity) mContext).showFragment(PatientHomepageFragment.newInstance(item.id), true);
         }
     }
 

@@ -15,7 +15,7 @@ public class VisualizerView extends View {
 
     private byte[] values;
 
-    private float[] points;
+    private Float[] points;
 
     private Rect rect = new Rect();
     private Paint paintLines = new Paint();
@@ -29,7 +29,6 @@ public class VisualizerView extends View {
     }
 
     private void init() {
-        values = new byte[4000];
         paintLines.setStrokeWidth(1);
         paintLines.setAntiAlias(true);
         paintLines.setColor(getResources().getColor(R.color.wave_color));
@@ -51,13 +50,19 @@ public class VisualizerView extends View {
         invalidate();
     }
 
+    public void updateVisualizer(Float[] floats) {
+        points = floats;
+        invalidate();
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
         if (values == null) {
-            return;
+            drawPoints(canvas);
         }
+
         /**
          * Set some base values as a starting point
          * This could be consider as a part of the calculation process
@@ -83,6 +88,53 @@ public class VisualizerView extends View {
             int startBaseY = values[(buffIndex - 1)] / scale;
 
             int stopBaseY = values[buffIndex] / scale;
+
+            if (startBaseY > height / 2) {
+                startBaseY = 2 + height / 2;
+                int checkSize = height / 2;
+                if (stopBaseY <= checkSize)
+                    return;
+                stopBaseY = 2 + height / 2;
+            }
+
+            int startY = startBaseY + height / 2;
+            int stopY = stopBaseY + height / 2;
+            canvas.drawLine(startX, startY, startX + 1, stopY, paintLines);
+            buffIndex++;
+            startX++;
+        }
+    }
+
+    private void drawPoints(Canvas canvas) {
+        if (points == null) {
+            return;
+        }
+
+        /**
+         * Set some base values as a starting point
+         * This could be consider as a part of the calculation process
+         */
+        int height = canvas.getHeight();
+        int buffIndex = (points.length / 2 - canvas.getWidth()) / 2;
+        int width = canvas.getWidth();
+        int scale = height / m_iScaler;
+        int startX = 0;
+        if (startX >= width) {
+            canvas.save();
+            return;
+        }
+        /**
+         * Here is where the real calculations is taken in to action
+         * In this while loop, we calculate the start and stop points
+         * for both X and Y
+         *
+         * The line is then drawer to the canvas with drawLine method
+         */
+        while (startX < width - 1) {
+
+            int startBaseY = (int) (points[(buffIndex - 1)] / scale);
+
+            int stopBaseY = (int) (points[buffIndex] / scale);
 
             if (startBaseY > height / 2) {
                 startBaseY = 2 + height / 2;

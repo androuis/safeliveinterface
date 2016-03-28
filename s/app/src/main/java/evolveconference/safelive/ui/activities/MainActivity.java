@@ -20,9 +20,9 @@ import com.squareup.picasso.Picasso;
 import java.util.Date;
 
 import evolveconference.safelive.R;
+import evolveconference.safelive.callbacks.fragments.PatientHomepageCallback;
 import evolveconference.safelive.model.NursingHome;
 import evolveconference.safelive.model.Staff;
-import evolveconference.safelive.ui.fragments.ActivitiesFragment;
 import evolveconference.safelive.ui.fragments.AlertFragment;
 import evolveconference.safelive.ui.fragments.CircleDashboardFragment;
 import evolveconference.safelive.ui.fragments.DashboardFragment;
@@ -32,11 +32,12 @@ import evolveconference.safelive.ui.fragments.PatientsFragment;
 import evolveconference.safelive.ui.fragments.SettingsFragment;
 import evolveconference.safelive.ui.fragments.StatisticsFragment;
 import evolveconference.safelive.utils.ComponentUtils;
-import evolveconference.safelive.utils.GetStaffInfo;
-import evolveconference.safelive.utils.GetStaffInfoCallback;
-import evolveconference.safelive.utils.StartHeartFragmentCallback;
+import evolveconference.safelive.tasks.GetStaffInfo;
+import evolveconference.safelive.callbacks.tasks.GetStaffInfoCallback;
+import evolveconference.safelive.callbacks.fragments.StartHeartFragmentCallback;
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, GetStaffInfoCallback, StartHeartFragmentCallback {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
+        GetStaffInfoCallback, StartHeartFragmentCallback, PatientHomepageCallback {
 
     public static final String PARAM_STAFF_ID = "staff_id";
 
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         actionBarDrawerToggle.syncState();
     }
 
-    public <T extends Fragment> void showFragment(T newFragment) {
+    public <T extends Fragment> void showFragment(T newFragment, boolean addToBackstack) {
         if (newFragment == null) {
             return;
         }
@@ -104,11 +105,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Fragment currentFragment = fm.findFragmentById(R.id.content_container);
         if (currentFragment == null || !(currentFragment.getClass() == newFragment.getClass())) {
             FragmentTransaction ft = fm.beginTransaction();
-            //ft.setCustomAnimations(R.anim.fade_in_quick_frag, R.anim.fade_out_quick_frag, R.anim.fade_in_quick_frag, R.anim.fade_out_quick_frag);
+            if (addToBackstack) {
+                ft.addToBackStack(newFragment.getClass().getSimpleName());
+            }
             ft.replace(R.id.frame, newFragment);
             ft.commit();
         }
         fm.executePendingTransactions();
+    }
+
+    public <T extends Fragment> void showFragment(T newFragment) {
+        showFragment(newFragment, false);
     }
 
     private <T extends Fragment> Fragment createFragment(Class<T> clazz) {
@@ -199,6 +206,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public void onCallback(int readingId, int residentId) {
         HeartRateFragment heartRateFragment = HeartRateFragment.newInstance(readingId, residentId);
-        showFragment(heartRateFragment);
+        showFragment(heartRateFragment, true);
+    }
+
+    @Override
+    public void onCallback(Fragment fragment, boolean addToStack) {
+        showFragment(fragment, addToStack);
     }
 }

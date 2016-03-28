@@ -75,5 +75,8 @@
     <string name="regular_risk_text">Regular resident</string>
     <string name="current_activity">%s is currently</string>
     <string name="activity">Activity</string>
+    <string name="sound">Sound</string>
+    <string name="heart_rate_title">Heart Rate</string>
+    <string name="sensors">Sensors</string>
 
 </resources>

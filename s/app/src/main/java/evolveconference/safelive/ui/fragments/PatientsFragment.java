@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.json.JSONException;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ import evolveconference.safelive.R;
 import evolveconference.safelive.dfapi.ApiException;
 import evolveconference.safelive.dfapi.ApiInvoker;
 import evolveconference.safelive.dfapi.BaseAsyncRequest;
+import evolveconference.safelive.model.Anomaly;
 import evolveconference.safelive.model.Resident;
 import evolveconference.safelive.model.ResidentList;
 import evolveconference.safelive.ui.adapters.GridPatientsAdapter;
@@ -41,7 +44,6 @@ public class PatientsFragment extends Fragment {
     private GridLayoutManager mGridLayoutManager;
     private Map<String, List<Item>> mHashMap = new LinkedHashMap<>();
     private Random mRandom = new Random();
-
 
     @Override
     public void onAttach(Activity activity) {
@@ -62,7 +64,6 @@ public class PatientsFragment extends Fragment {
     }
 
     private void setupPatients() {
-        // todo update to grid adapter
         mGridLayoutManager = new GridLayoutManager(getContext(), getContext().getResources().getInteger(R.integer.grid_item_span_count));
         mGridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -91,12 +92,17 @@ public class PatientsFragment extends Fragment {
 
     private class GetResidents extends BaseAsyncRequest {
 
+        private List<Resident> residentList;
+
         protected void doSetup() throws ApiException, JSONException {
             callerName = "GetResidents";
 
             serviceName = AppConstants.DB_SVC;
             endPoint = "resident";
             verb = "GET";
+
+            queryParams = new LinkedHashMap<>();
+            queryParams.put("order", "resid%20asc");
 
             // need to include the API key and session token
             applicationApiKey = AppConstants.API_KEY;
@@ -105,22 +111,59 @@ public class PatientsFragment extends Fragment {
 
         @Override
         protected void processResponse(String response) throws Exception {
-            List<Resident> residentList = ((ResidentList) ApiInvoker.deserialize(response, "", ResidentList.class)).record;
-            if (residentList != null) {
+            residentList = ((ResidentList) ApiInvoker.deserialize(response, "", ResidentList.class)).record;
+            doSetup2();
+            processResponse2(call());
+
+        }
+
+        private void doSetup2() {
+            callerName = "GetResidents";
+
+            serviceName = AppConstants.DB_SVC;
+            endPoint = "anomaliescount";
+            verb = "GET";
+
+            queryParams = new LinkedHashMap<>();
+            queryParams.put("order", "residentid%20asc");
+
+            // need to include the API key and session token
+            applicationApiKey = AppConstants.API_KEY;
+            sessionToken = PrefUtil.getString(getActivity().getApplicationContext(), AppConstants.SESSION_TOKEN);
+        }
+
+        private void processResponse2(String response) throws ApiException {
+            List<Incident> incidentList = ((IncidentList) ApiInvoker.deserialize(response, "", IncidentList.class)).record;
+            if (residentList != null && incidentList != null) {
                 List<Item> highRisk = new ArrayList<>();
                 List<Item> regularRisk = new ArrayList<>();
                 mHashMap.clear();
+                int incidentIndex = 0;
                 for (Resident resident : residentList) {
+                    int alertCount = 0;
+                    int warningCount = 0;
+                    for (int i = incidentIndex; i < incidentList.size(); i++) {
+                        Incident incident = incidentList.get(i);
+                        if (resident.id == incident.residentid) {
+                            incidentIndex = i;
+                            if (incident.eventtype == Resident.RISK_HIGH) {
+                                alertCount = incident.incidents;
+                            } else {
+                                warningCount = incident.incidents;
+                            }
+                        } else if (resident.id < incident.residentid) {
+                            incidentIndex = incidentIndex > 0 ? incidentIndex-- : 0;
+                        }
+                    }
                     if (resident.riskClass == Resident.RISK_HIGH) {
-                        highRisk.add(new Item(resident.id, resident.firstName, resident.lastName, resident.photo, mRandom.nextInt(10), mRandom.nextInt(10)));
+                        highRisk.add(new Item(resident.id, resident.firstName, resident.lastName, resident.photo, alertCount, warningCount));
                     } else {
-                        regularRisk.add(new Item(resident.id, resident.firstName, resident.lastName, resident.photo, mRandom.nextInt(10), mRandom.nextInt(10)));
+                        regularRisk.add(new Item(resident.id, resident.firstName, resident.lastName, resident.photo, alertCount, warningCount));
                     }
                 }
                 mHashMap.put(getString(R.string.high_risk_text), highRisk);
                 mHashMap.put(getString(R.string.regular_risk_text), regularRisk);
             }
-
         }
 
         @Override
@@ -134,61 +177,6 @@ public class PatientsFragment extends Fragment {
             }
         }
     }
-
-    /*@Subscribe(sticky = true, threadMode = ThreadMode.MainThread)
-    public void onPatientsEvent(Events.PatientsEvent event) {
-        List<Item> highRisk = new ArrayList<>();
-        List<Item> regularRisk = new ArrayList<>();
-        Random r = new Random();
-        List<PatientNew> patientsList = event.getData();
-        if (patientsList != null) {
-            mHashMap.clear();
-            for (PatientNew patientNew : patientsList) {
-                if (patientNew.getRiskclass() != 0) {
-                    highRisk.add(new Item(patientNew.getId(), GridPatientsAdapter.TYPE_PATIENT_CARD,
-                            patientNew.getFirstName(), patientNew.getLastName(), Generator.randomAlertWarningRisk(), patientNew.getPicture(), r.nextBoolean(), r.nextBoolean()));
-                } else {
-                    regularRisk.add(new Item(patientNew.getId(), GridPatientsAdapter.TYPE_PATIENT_CARD,
-                            patientNew.getFirstName(), patientNew.getLastName(), Generator.randomAlertWarningRisk(), patientNew.getPicture(), r.nextBoolean(), r.nextBoolean()));
-                }
-            }
-            mHashMap.put(getString(R.string.high_risk_text), highRisk);
-            mHashMap.put(getString(R.string.regular_risk_text), regularRisk);
-            mAdapter.swapData(mHashMap);
-        }
-    }
-
-
-    private void initializeData() {
-
-        Random r = new Random();
-        mHashMap = new LinkedHashMap<>();
-        //TODO update with real data
-        List<Item> items = new ArrayList<>();
-        List<Item> items2 = new ArrayList<>();
-//        items.add(new Item(0, GridPatientsAdapter.TYPE_HEADER,
-//                getString(R.string.high_risk_text), null, 0));
-        List<Patient> patients = app.getPatients();
-
-        List<Patient> highRisk = patients.subList(0, 3);
-        for (Patient p : highRisk) {
-            items.add(new Item(p.id, GridPatientsAdapter.TYPE_PATIENT_CARD,
-                    p.name, p.lastname, p.risk, null, r.nextBoolean(), r.nextBoolean()));
-        }
-//        List<Patient> regularRisk = patients.subList(3, patients.size() - 1);
-//        just mock data
-        List<Patient> regularRisk = patients;
-        for (Patient p : regularRisk) {
-            items2.add(new Item(p.id, GridPatientsAdapter.TYPE_PATIENT_CARD,
-                    p.name, p.lastname, p.risk, null, r.nextBoolean(), r.nextBoolean()));
-        }
-
-        mHashMap.put(getString(R.string.high_risk_text), items);
-        mHashMap.put(getString(R.string.regular_risk_text), items2);
-        mAdapter = new GridPatientsAdapter(null, mHashMap, getContext());
-        mPatientsRecycler.setAdapter(mAdapter);
-
-    }*/
 
     /**
      * Nested class for recycleview items styling
@@ -226,5 +214,19 @@ public class PatientsFragment extends Fragment {
                 }
             }
         }
+    }
+
+    public static class Incident {
+        @JsonProperty("residentid")
+        public int residentid;
+        @JsonProperty("incidents")
+        public int incidents;
+        @JsonProperty("eventtype")
+        public int eventtype;
+    }
+
+    public static class IncidentList {
+        @JsonProperty("resource")
+        public List<Incident> record = new ArrayList<>();
     }
 }

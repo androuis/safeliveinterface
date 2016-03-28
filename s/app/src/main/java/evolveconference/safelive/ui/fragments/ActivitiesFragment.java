@@ -26,7 +26,6 @@ import evolveconference.safelive.R;
 import evolveconference.safelive.dfapi.ApiException;
 import evolveconference.safelive.dfapi.ApiInvoker;
 import evolveconference.safelive.dfapi.BaseAsyncRequest;
-import evolveconference.safelive.model.Anomaly;
 import evolveconference.safelive.model.Reading;
 import evolveconference.safelive.model.ReadingList;
 import evolveconference.safelive.model.Resident;
@@ -34,8 +33,8 @@ import evolveconference.safelive.ui.view.Circle;
 import evolveconference.safelive.ui.view.CircleAngleAnimation;
 import evolveconference.safelive.utils.AppConstants;
 import evolveconference.safelive.utils.ComponentUtils;
-import evolveconference.safelive.utils.GetResidentInfo;
-import evolveconference.safelive.utils.GetResidentInfoCallback;
+import evolveconference.safelive.tasks.GetResidentInfo;
+import evolveconference.safelive.callbacks.tasks.GetResidentInfoCallback;
 import evolveconference.safelive.utils.PrefUtil;
 
 /**
