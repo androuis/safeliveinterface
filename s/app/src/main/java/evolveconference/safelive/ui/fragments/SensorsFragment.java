@@ -16,9 +16,9 @@ import evolveconference.safelive.callbacks.fragments.PatientHomepageCallback;
 /**
  * Created by andrei on 26/03/16.
  */
-public class PatientHomepageFragment extends AbstractPatientFragment implements View.OnClickListener {
+public class SensorsFragment extends AbstractPatientFragment implements View.OnClickListener {
 
-    private static final String TAG = PatientHomepageFragment.class.getSimpleName();
+    private static final String TAG = SensorsFragment.class.getSimpleName();
 
     @Bind(R.id.location)
     LinearLayout linearLayoutLocation;
@@ -31,10 +31,10 @@ public class PatientHomepageFragment extends AbstractPatientFragment implements 
 
     private PatientHomepageCallback patientHomepageCallback;
 
-    public static PatientHomepageFragment newInstance(int residentId) {
+    public static SensorsFragment newInstance(int residentId) {
         Bundle args = new Bundle();
         args.putInt(ARG_RESIDENT_ID, residentId);
-        PatientHomepageFragment fragment = new PatientHomepageFragment();
+        SensorsFragment fragment = new SensorsFragment();
         fragment.setArguments(args);
         return fragment;
     }

@@ -49,6 +49,8 @@ dependencies {
     compile "com.android.support:design:$supportLibraryVersion"
     compile "com.android.support:recyclerview-v7:$supportLibraryVersion"
     compile "com.android.support:support-v4:$supportLibraryVersion"
+    compile project(':GraphView')
+
     compile 'com.google.android.gms:play-services:8.4.0'
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
@@ -60,8 +62,9 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.0.0'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.6.0-rc3'
     compile 'com.pkmmte.view:circularimageview:1.1'
-    compile project(':GraphView')
-
     compile 'com.github.wendykierp:JTransforms:3.1'
     compile 'pl.edu.icm:JLargeArrays:1.4'
+    compile 'com.google.android.gms:play-services-ads:8.4.0'
+    compile 'com.google.android.gms:play-services-identity:8.4.0'
+    compile 'com.google.android.gms:play-services-gcm:8.4.0'
 }

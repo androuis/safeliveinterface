@@ -18,6 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@id/patient_avatar"
+        android:layout_alignEnd="@id/patient_avatar"
+        android:layout_alignStart="@id/patient_avatar"
         android:gravity="center"
         android:maxLines="1"
         android:ellipsize="end"

@@ -66,14 +66,14 @@ public class RecordIntentService extends IntentService {
                 return;
             }
 
-            final short[] buffer = new short[blockSize];
+            final byte[] buffer = new byte[blockSize];
             final double[] toTransform = new double[blockSize];
             audioRecord.startRecording();
             int i = 0;
             while (shouldRecord) {
                 Thread.sleep(1000);
                 final int bufferReadResult = audioRecord.read(buffer, 0, blockSize);
-                SafeLiveApplication.instance.addToLimitQueue(calculate(RECORDER_SAMPLERATE, buffer));
+                SafeLiveApplication.instance.addToLimitQueue(buffer);
             }
             audioRecord.stop();
             audioRecord.release();

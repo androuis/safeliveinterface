@@ -1,10 +1,15 @@
 package evolveconference.safelive.ui.activities;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -23,6 +28,7 @@ import evolveconference.safelive.R;
 import evolveconference.safelive.callbacks.fragments.PatientHomepageCallback;
 import evolveconference.safelive.model.NursingHome;
 import evolveconference.safelive.model.Staff;
+import evolveconference.safelive.tasks.RecordIntentService;
 import evolveconference.safelive.ui.fragments.AlertFragment;
 import evolveconference.safelive.ui.fragments.CircleDashboardFragment;
 import evolveconference.safelive.ui.fragments.DashboardFragment;
@@ -40,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         GetStaffInfoCallback, StartHeartFragmentCallback, PatientHomepageCallback {
 
     public static final String PARAM_STAFF_ID = "staff_id";
+
+    public static final int PERMISSION_REQUEST_RECORD_AUDIO = 10;
 
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
@@ -61,7 +69,36 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         setupUI();
         setupData();
+        setupRecording();
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_RECORD_AUDIO:
+                if (permissions != null && permissions.length > 0 && grantResults != null && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startAudioRecording();
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    private void setupRecording() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED) {
+            startAudioRecording();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, PERMISSION_REQUEST_RECORD_AUDIO);
+        }
+    }
+
+    private void startAudioRecording() {
+        Intent intent = new Intent(this, RecordIntentService.class);
+        intent.setAction(RecordIntentService.ACTION_START_RECORDING);
+        startService(intent);
+    }
+
 
     private void setupUI() {
         NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
@@ -107,6 +144,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             FragmentTransaction ft = fm.beginTransaction();
             if (addToBackstack) {
                 ft.addToBackStack(newFragment.getClass().getSimpleName());
+            } else {
+                fm.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
             ft.replace(R.id.frame, newFragment);
             ft.commit();
@@ -162,8 +201,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(MenuItem menuItem) {
         if (menuItem.isChecked()) {
             menuItem.setChecked(false);
-        }
-        else {
+        } else {
             menuItem.setChecked(true);
         }
 

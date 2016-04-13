@@ -43,7 +43,6 @@ public class PatientsFragment extends Fragment {
     private GridPatientsAdapter mAdapter;
     private GridLayoutManager mGridLayoutManager;
     private Map<String, List<Item>> mHashMap = new LinkedHashMap<>();
-    private Random mRandom = new Random();
 
     @Override
     public void onAttach(Activity activity) {

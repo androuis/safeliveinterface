@@ -1,11 +1,22 @@
 package evolveconference.safelive;
 
 import android.app.Application;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.multidex.MultiDex;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.StreamCorruptedException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 
@@ -24,7 +35,11 @@ public class SafeLiveApplication extends Application {
     public static SafeLiveApplication instance;
     public static DateFormat anomalyTimestampFormatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.ENGLISH);
 
-    private static final int LIMIT_QUEUE = 3;
+    public static final String SHARED_PREFS = "shared_prefs";
+    public static final String SHARED_PREFS_KEY_SIZE = "key_size";
+    public static final String SHARED_PREFS_KEY_VALUE = "key_value";
+    private static final String SOUND_FILE = ".sound";
+    private static final int LIMIT_QUEUE = 15 * 60;
     private LimitedQueue limitedQueue = new LimitedQueue(LIMIT_QUEUE);
 
     @Override
@@ -35,10 +50,45 @@ public class SafeLiveApplication extends Application {
         initCalligraphy();
         patientRepository = new PatientRepository();
         profileRepository = new ProfileRepository();
+        saveSound();
+    }
 
-        Intent intent = new Intent(this, RecordIntentService.class);
-        intent.setAction(RecordIntentService.ACTION_START_RECORDING);
-        startService(intent);
+    private void saveSound() {
+        try {
+            FileOutputStream fileOutputStream = openFileOutput(SOUND_FILE, Context.MODE_PRIVATE);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+            objectOutputStream.writeObject(limitedQueue);
+            objectOutputStream.close();
+            fileOutputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onTrimMemory(int level) {
+        super.onTrimMemory(level);
+        readSound();
+    }
+
+    private void readSound() {
+        try {
+            FileInputStream fileInputStream = openFileInput(SOUND_FILE);
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+            limitedQueue = (LimitedQueue) objectInputStream.readObject();
+            objectInputStream.close();
+            fileInputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (StreamCorruptedException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 
     private void initCalligraphy() {
@@ -50,7 +100,7 @@ public class SafeLiveApplication extends Application {
     }
 
     public LimitedQueue getLimitedQueue() {
-        return new LimitedQueue<>(limitedQueue);
+        return limitedQueue;
     }
 
     public void addToLimitQueue(Object element) {

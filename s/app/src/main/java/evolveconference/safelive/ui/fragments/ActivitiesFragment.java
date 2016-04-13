@@ -188,7 +188,7 @@ public class ActivitiesFragment extends Fragment implements GetResidentInfoCallb
         @Override
         protected void processResponse(String response) throws Exception {
             List<Reading> readingList = ((ReadingList) ApiInvoker.deserialize(response, "", ReadingList.class)).record;
-            if (readingList != null) {
+            if (readingList != null && !readingList.isEmpty()) {
                 reading = readingList.get(0);
             }
         }

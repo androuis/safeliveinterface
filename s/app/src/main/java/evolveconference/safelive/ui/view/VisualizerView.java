@@ -61,6 +61,7 @@ public class VisualizerView extends View {
 
         if (values == null) {
             drawPoints(canvas);
+            return;
         }
 
         /**
@@ -115,7 +116,7 @@ public class VisualizerView extends View {
          * This could be consider as a part of the calculation process
          */
         int height = canvas.getHeight();
-        int buffIndex = (points.length / 2 - canvas.getWidth()) / 2;
+        int buffIndex = points.length / 2;
         int width = canvas.getWidth();
         int scale = height / m_iScaler;
         int startX = 0;
